@@ -20,6 +20,25 @@ class NoteEntity {
       this.isArchived,
       this.isPrivate});
 
+
+  NoteEntity copyWith({
+    String id,
+    String title,
+    String content,
+    String username,
+    bool isArchived,
+    bool isPrivate
+  }) {
+    return NoteEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      username: username ?? this.username,
+      isArchived: isArchived ?? this.isArchived,
+      isPrivate: isPrivate ?? this.isPrivate
+    );
+  }
+
   factory NoteEntity.fromJson(Map<String, dynamic> json) =>
       _$NoteEntityFromJson(json);
 

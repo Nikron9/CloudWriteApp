@@ -1,3 +1,4 @@
+import 'package:cloudwrite/api/entities/note_entity.dart';
 import 'package:cloudwrite/app/pages/auth/auth_service.dart';
 import 'package:cloudwrite/service_resolver.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -69,9 +70,44 @@ class GraphQLService {
 }""", variables: Map());
   }
 
-  Future<QueryResult> fetchNotes() async {
+  Future<QueryResult> createNote(NoteEntity note) async {
+    return _performMutation("""mutation{
+  addNote(
+  title: \"${note.title}\",
+  content: \"${note.content}\",
+  isPrivate: ${note.isPrivate}
+  ){
+    _id
+    title
+    content
+    isPrivate
+    isArchived
+  }
+}""", variables: Map());
+  }
+
+  Future<QueryResult> updateNote(NoteEntity note) async {
+    return _performMutation("""mutation{
+  updateNote(
+  _id: \"${note.id}\",
+  title: \"${note.title}\",
+  content: \"${note.content}\",
+  isPrivate: ${note.isPrivate},
+  isArchived: ${note.isArchived}
+  ){
+    _id
+    title
+    content
+    isPrivate
+    isArchived
+  }
+}""", variables: Map());
+  }
+
+  Future<QueryResult> fetchNotes(
+      String search, bool onlyMine, bool withArchived) async {
     return _performQuery("""query {
-  notes {
+  notes(searchTerm:${search.isNotEmpty ? "\"$search\"" : "\"\""}, onlyMine:$onlyMine, withArchived:$withArchived) {
     _id
     content
     createdAt

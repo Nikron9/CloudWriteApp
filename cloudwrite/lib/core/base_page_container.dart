@@ -9,14 +9,10 @@ class BasePageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(children: [
-      SingleChildScrollView(
-          child: Center(
-              child: Container(
-                  height: context.screenHeight(),
-                  width: context.screenWidth() * 0.9,
-                  child: child)))
-    ]));
+    return SingleChildScrollView(
+        child: Center(
+            child: Container(
+                width: context.screenWidth() * 0.9,
+                child: child)));
   }
 }

@@ -21,6 +21,8 @@
   "common_field": "Pole",
   "common_clear": "Wyczyść",
   "common_username": "Nazwa użytkownika",
+  "common_title": "Tytuł",
+  "common_content": "Zawartość",
   "validation_error_general_please_fill": "Pole nie może być puste",
   "change_language": "Zmiana języka",
   "choose_language": "Wybierz język",

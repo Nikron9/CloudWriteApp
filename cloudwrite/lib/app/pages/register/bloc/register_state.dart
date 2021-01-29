@@ -13,7 +13,7 @@ class RegisterState extends Equatable {
     this.password = const Password.pure(),
   });
 
-  get isFormValid => email.error != null && username.error != null && password.error != null;
+  get isFormValid => email.error == null && username.error == null && password.error == null;
   final FormzStatus formState;
   final Email email;
   final Username username;

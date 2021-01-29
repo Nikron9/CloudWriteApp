@@ -10,21 +10,34 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   NotesState get initialState => NotesInit();
 
+  // @override
+  // Stream<Transition< NotesEvent, NotesState >> transformEvents(
+  //     Stream<NotesEvent> events, transitionFn) {
+  //   return events.
+  //       .debounceTime(Duration(milliseconds: 300))
+  //       .switchMap((transitionFn));
+  // }
+
   @override
   Stream<NotesState> mapEventToState(
     NotesEvent event,
   ) async* {
-    yield null;
     if (event is Fetch) {
+      yield NotesLoading(event.filters);
+      await Future.delayed(Duration(seconds: 1));
+
       try {
-        var result = await ServiceResolver.get<GraphQLService>().fetchNotes();
+        var result = await ServiceResolver.get<GraphQLService>().fetchNotes(
+            event.filters.search,
+            event.filters.onlyMine,
+            event.filters.withArchived);
 
         if (!result.hasException) {
           var notes = (result.data["notes"] as List)
               .map((e) => NoteEntity.fromJson(e))
               .toList();
 
-          yield NotesLoaded(notes: notes);
+          yield NotesLoaded(notes: notes, filters: event.filters);
         } else {
           yield NotesError(
               message: result.exception.graphqlErrors.first.message);

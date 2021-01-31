@@ -23,9 +23,16 @@
   "common_username": "Nazwa użytkownika",
   "common_title": "Tytuł",
   "common_content": "Zawartość",
+  "common_archive": "Archiwizuj",
+  "common_save": "Zapisz",
   "validation_error_general_please_fill": "Pole nie może być puste",
   "change_language": "Zmiana języka",
   "choose_language": "Wybierz język",
   "login_logging_in": "Logowanie",
-  "register_registration": "Rejestrowanie"
+  "register_registration": "Rejestrowanie",
+  "notes_list_only_mine_filter": "Tylko moje",
+  "notes_list_with_archived_filter": "Pokaż zarchiwizowane",
+  "note_details_private_field_title": "Prywatna",
+  "note_details_create": "Tworzenie notatki",
+  "note_details_edit": "Detale notatki"
 }

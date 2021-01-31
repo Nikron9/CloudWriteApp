@@ -71,12 +71,13 @@ class NoteDetailsBloc extends Bloc<NoteDetailsEvent, NoteDetailsState> {
             state.mode == NoteDetailsMode.Create ? "addNote" : "updateNote"]);
 
         if (!result.hasException) {
-          yield state.copyWith(status: FormzStatus.submissionSuccess);
+          yield NoteDetailsSubmitSuccess(newNote: newNote);
         } else {
-          yield null;
+          yield NoteDetailsSubmitFailure(
+              message: result.exception.graphqlErrors.first.message);
         }
-      } on Exception catch (_) {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+      } on Exception catch (error) {
+        yield NoteDetailsSubmitFailure(message: error.toString());
       }
     }
   }

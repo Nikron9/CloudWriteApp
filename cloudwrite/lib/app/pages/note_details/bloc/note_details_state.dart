@@ -1,7 +1,9 @@
+import 'package:cloudwrite/api/entities/note_entity.dart';
 import 'package:cloudwrite/app/form_fields/note_content.dart';
 import 'package:cloudwrite/app/form_fields/note_is_private.dart';
 import 'package:cloudwrite/app/form_fields/note_title.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
 enum NoteDetailsMode { Read, Edit, Create }
@@ -37,4 +39,22 @@ class NoteDetailsState extends Equatable {
 
   @override
   List<Object> get props => [formState, mode, title, content, isPrivate];
+}
+
+class NoteDetailsSubmitSuccess extends NoteDetailsState {
+  final NoteEntity newNote;
+
+  NoteDetailsSubmitSuccess({@required this.newNote});
+
+  @override
+  List<Object> get props => [newNote];
+}
+
+class NoteDetailsSubmitFailure extends NoteDetailsState {
+  final String message;
+
+  NoteDetailsSubmitFailure({@required this.message});
+
+  @override
+  List<Object> get props => [message];
 }

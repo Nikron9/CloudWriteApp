@@ -10,18 +10,14 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   NotesState get initialState => NotesInit();
 
-  // @override
-  // Stream<Transition< NotesEvent, NotesState >> transformEvents(
-  //     Stream<NotesEvent> events, transitionFn) {
-  //   return events.
-  //       .debounceTime(Duration(milliseconds: 300))
-  //       .switchMap((transitionFn));
-  // }
-
   @override
   Stream<NotesState> mapEventToState(
     NotesEvent event,
   ) async* {
+    if (event is AddNewNote) {
+      state.notes.insert(0, event.newNote);
+      yield NotesLoaded(notes: state.notes, filters: state.filters);
+    }
     if (event is Fetch) {
       yield NotesLoading(event.filters);
       await Future.delayed(Duration(seconds: 1));

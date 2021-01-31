@@ -82,6 +82,7 @@ class GraphQLService {
     content
     isPrivate
     isArchived
+    username
   }
 }""", variables: Map());
   }
@@ -100,6 +101,7 @@ class GraphQLService {
     content
     isPrivate
     isArchived
+    username
   }
 }""", variables: Map());
   }

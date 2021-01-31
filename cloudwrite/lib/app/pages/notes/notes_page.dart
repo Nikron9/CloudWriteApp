@@ -16,6 +16,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:flutter_translate/global.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 class NotesPage extends StatelessWidget {
@@ -26,27 +27,28 @@ class NotesPage extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) => BlocProvider(
             create: (context) => NotesBloc(NotesInit()),
-            child: Scaffold(
-                appBar: AppBar(
-                  title: Text(translate("CloudWrite")),
-                  actions: [
-                    IconButton(
-                        icon: Icon(Icons.logout),
-                        onPressed: () {
-                          context
-                              .read<AuthenticationBloc>()
-                              .add(UserLoggedOut());
-                          navigation.navigateTo(context, "/", clearStack: true);
-                        })
-                  ],
-                ),
-                body: _notesMainContainer(context),
-                floatingActionButton: BlocBuilder<NotesBloc, NotesState>(
-                  builder: (context, state) => FloatingActionButton(
-                    child: Icon(Icons.add),
-                    onPressed: () => navigateToNote(context),
-                  ),
-                ))));
+            child: Builder(
+                builder: (context) => Scaffold(
+                      appBar: AppBar(
+                        title: Text(translate("CloudWrite")),
+                        actions: [
+                          IconButton(
+                              icon: Icon(Icons.logout),
+                              onPressed: () {
+                                context
+                                    .read<AuthenticationBloc>()
+                                    .add(UserLoggedOut());
+                                navigation.navigateTo(context, "/",
+                                    clearStack: true);
+                              })
+                        ],
+                      ),
+                      body: _notesMainContainer(context),
+                      floatingActionButton: FloatingActionButton(
+                        child: Icon(Icons.add),
+                        onPressed: () => navigateToNote(context),
+                      ),
+                    ))));
   }
 
   Future navigateToNote(BuildContext context) async {
@@ -54,6 +56,7 @@ class NotesPage extends StatelessWidget {
         routeSettings:
             RouteSettings(arguments: NoteEntity().copyWith(isArchived: false)));
 
+    // context.read<NotesBloc>().state.notes.add(result);
     context.read<NotesBloc>().add(AddNewNote(newNote: result));
   }
 
@@ -119,50 +122,44 @@ class NotesPage extends StatelessWidget {
   }
 
   Widget _notesList() {
-    return BlocBuilder<NotesBloc, NotesState>(
-        builder: (context, state) {
-          if (state is NotesLoaded) {
-            if (state.notes.isEmpty) {
-              return Padding(
-                  padding: EdgeInsets.all(20), child: Text("List is empty"));
-            } else {
-              return Expanded(
-                  child: RefreshIndicator(
-                      onRefresh: () async {
-                        context.read<NotesBloc>().state.notes.clear();
-                        context
-                            .read<NotesBloc>()
-                            .add(Fetch(filters: state.filters));
+    return BlocBuilder<NotesBloc, NotesState>(builder: (context, state) {
+      if (state is NotesLoaded) {
+        return Expanded(
+            flex: 1,
+            child: SmartRefresher(
+                controller: RefreshController(initialRefresh: false),
+                onRefresh: () async {
+                  context.read<NotesBloc>().add(Fetch(filters: state.filters));
 
-                        return context
-                            .read<NotesBloc>()
-                            .firstWhere((element) => element is Fetch);
-                      },
-                      child: WaterfallFlow.builder(
-                          primary: true,
-                          shrinkWrap: true,
-                          itemCount: state.notes.length,
-                          gridDelegate:
-                              SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: context.isPortrait() ? 2 : 3),
-                          itemBuilder: (context, int index) {
-                            return _noteListItem(context, state, index);
-                          })));
-            }
-          } else if (state is NotesInit) {
-            context.read<NotesBloc>().add(Fetch());
-            return Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator());
-          } else if (state is NotesError) {
-            return Padding(
-                padding: EdgeInsets.all(20), child: Text(state.message));
-          } else {
-            return Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator());
-          }
-        });
+                  return context
+                      .read<NotesBloc>()
+                      .firstWhere((element) => element is Fetch);
+                },
+                child: state.notes.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text("List is empty"))
+                    : WaterfallFlow.builder(
+                        primary: true,
+                        shrinkWrap: true,
+                        itemCount: state.notes.length,
+                        gridDelegate:
+                            SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: context.isPortrait() ? 2 : 3),
+                        itemBuilder: (context, int index) {
+                          return _noteListItem(context, state, index);
+                        })));
+      } else if (state is NotesInit) {
+        context.read<NotesBloc>().add(Fetch());
+        return Padding(
+            padding: EdgeInsets.all(20), child: CircularProgressIndicator());
+      } else if (state is NotesError) {
+        return Padding(padding: EdgeInsets.all(20), child: Text(state.message));
+      } else {
+        return Padding(
+            padding: EdgeInsets.all(20), child: CircularProgressIndicator());
+      }
+    });
   }
 
   Widget _noteListItem(BuildContext context, NotesLoaded state, int index) {

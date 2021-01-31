@@ -11,7 +11,7 @@ class Fetch extends NotesEvent {
   Fetch({this.filters = const NotesFilters()});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [filters];
 }
 
 class AddNewNote extends NotesEvent {

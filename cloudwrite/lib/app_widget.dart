@@ -45,9 +45,7 @@ class _AppWidgetState extends State<AppWidget> {
     var localizationDelegate = _app.localizationDelegate;
 
     return BlocProvider(
-        create: (context) {
-          return AuthenticationBloc()..add(AppLoaded());
-        },
+        create: (context) => AuthenticationBloc()..add(AppLoaded()),
         child: LocalizationProvider(
             state: LocalizationProvider.of(context).state,
             child: MaterialApp(

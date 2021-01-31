@@ -6,20 +6,17 @@ abstract class NotesState extends Equatable {
   final NotesFilters filters;
 
   NotesState({this.notes = const [], this.filters = const NotesFilters()});
+
+  @override
+  List<Object> get props => [notes, filters];
 }
 
 class NotesInit extends NotesState {
   NotesInit() : super();
-
-  @override
-  List<Object> get props => [];
 }
 
 class NotesLoading extends NotesState {
-  NotesLoading(filters) : super(filters: filters);
-
-  @override
-  List<Object> get props => [];
+  NotesLoading() : super();
 }
 
 class NotesError extends NotesState {
@@ -28,7 +25,7 @@ class NotesError extends NotesState {
   NotesError({this.message}) : super();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }
 
 class NotesLoaded extends NotesState {
@@ -40,10 +37,10 @@ class NotesLoaded extends NotesState {
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [notes, filters];
 }
 
-class NotesFilters {
+class NotesFilters extends Equatable{
   final String search;
   final bool onlyMine;
   final bool withArchived;
@@ -57,4 +54,7 @@ class NotesFilters {
 
   const NotesFilters(
       {this.search = "", this.onlyMine = true, this.withArchived = false});
+
+  @override
+  List<Object> get props => [search, onlyMine, withArchived];
 }

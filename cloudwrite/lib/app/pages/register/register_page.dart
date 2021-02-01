@@ -18,6 +18,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: Key("register_screen_key"),
         appBar: AppBar(
           title: Text(translate("common_registration")),
         ),
@@ -49,29 +50,28 @@ class RegisterPage extends StatelessWidget {
                           child: Container(
                               decoration: BoxDecoration(
                                   gradient: RadialGradient(colors: <Color>[
-                                    Colors.cyan,
-                                    Colors.transparent
-                                  ])))),
+                            Colors.cyan,
+                            Colors.transparent
+                          ])))),
                       Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(),
-                              Padding(padding: EdgeInsets.all(5)),
-                              Text("${translate("register_registration")}...",
-                                  style: TextStyle(
-                                      color: Colors.white, decorationThickness: 5)),
-                            ],
-                          )),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          Padding(padding: EdgeInsets.all(5)),
+                          Text("${translate("register_registration")}...",
+                              style: TextStyle(
+                                  color: Colors.white, decorationThickness: 5)),
+                        ],
+                      )),
                     ],
                   ));
             });
       } else if (state.formState.isSubmissionSuccess) {
-        navigation.navigateTo(context, "/",
-            clearStack: true);
+        navigation.navigateTo(context, "/", clearStack: true);
         navigation.navigateTo(context, "/login");
       } else if (state is RegisterFailure) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        Scaffold.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade300,
             content: Text(state.message)));
       }
@@ -97,18 +97,18 @@ class RegisterPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextField(
-          key: const Key('register_form_email_text_input'),
+          key: const Key('register_email_field_key'),
           onChanged: (email) =>
               context.read<RegisterBloc>().add(RegisterEmailChanged(email)),
           decoration: InputDecoration(
               labelText: translate("common_email"),
-              errorText: !state.email.invalid
-                  ? null
-                  : state.email.error == EmailValidationError.empty
+              errorText: state.email.invalid
+                  ? state.email.error == EmailValidationError.empty
                       ? translate("validation_error_general_please_fill")
                       : state.email.error == EmailValidationError.format
                           ? translate("validation_error_general_please_fill")
-                          : null),
+                          : null
+                  : null),
         );
       },
     );
@@ -119,19 +119,19 @@ class RegisterPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextField(
-          key: const Key('register_form_username_text_input'),
+          key: const Key('register_username_field_key'),
           onChanged: (username) => context
               .read<RegisterBloc>()
               .add(RegisterUsernameChanged(username)),
           decoration: InputDecoration(
               labelText: translate("common_username"),
-              errorText: !state.username.invalid
-                  ? null
-                  : state.username.error == UsernameValidationError.empty
+              errorText: state.username.invalid
+                  ? state.username.error == UsernameValidationError.empty
                       ? translate("validation_error_general_please_fill")
                       : state.username.error == UsernameValidationError.length
                           ? translate("validation_error_general_please_fill")
-                          : null),
+                          : null
+                  : null),
         );
       },
     );
@@ -142,20 +142,20 @@ class RegisterPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          key: const Key('register_form_password_text_input'),
+          key: const Key('register_password_field_key'),
           onChanged: (password) => context
               .read<RegisterBloc>()
               .add(RegisterPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
               labelText: translate("common_password"),
-              errorText: !state.password.invalid
-                  ? null
-                  : state.password.error == PasswordValidationError.empty
+              errorText: state.password.invalid
+                  ? state.password.error == PasswordValidationError.empty
                       ? translate("validation_error_general_please_fill")
                       : state.password.error == PasswordValidationError.length
                           ? translate("validation_error_general_please_fill")
-                          : null),
+                          : null
+                  : null),
         );
       },
     );
@@ -167,7 +167,7 @@ class RegisterPage extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         key: const Key('register_form_submit_button'),
         child: Text(translate("common_register")),
-        onPressed: state.formState.isValidated
+        onPressed: state.isFormValid
             ? () {
                 context.read<RegisterBloc>().add(RegisterChanged());
               }

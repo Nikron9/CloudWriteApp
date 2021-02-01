@@ -51,7 +51,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     LoginState state,
   ) async* {
-    if (state.formState.isValidated) {
+    if (state.isFormValid) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
         await Future.delayed(Duration(seconds: 2));

@@ -10,8 +10,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 class AuthService {
   var apiClient = ServiceResolver.get<GraphQLService>();
 
-  // final authStream = PublishSubject<AuthenticationStatus>();
-
   FlutterSecureStorage _storage;
 
   AuthService(FlutterSecureStorage storage) {
@@ -19,21 +17,6 @@ class AuthService {
   }
 
   static const userKey = "user_entity";
-
-  // get token =>
-  //     Future.value(_storage.read(key: userKey))
-  //         .then((value) =>
-  //     UserEntity
-  //         .fromJson(jsonDecode(value))
-  //         .token);
-  //
-  // Stream<AuthenticationStatus> get authStatus async* {
-  //   if (JwtDecoder.isExpired(await token)) {
-  //     authStream.sink.add(AuthenticationStatus.unauthenticated);
-  //   } else {
-  //     authStream.sink.add(AuthenticationStatus.authenticated);
-  //   }
-  // }
 
   Future<MapEntry<QueryResult, dynamic>> signIn(String username,
       String password) {
@@ -52,7 +35,7 @@ class AuthService {
   }
 
   Future<void> signOut() {
-    return _storage.write(key: userKey, value: null);
+    return _storage.delete(key: userKey);
   }
 
   Future<UserEntity> getCurrentUser() {

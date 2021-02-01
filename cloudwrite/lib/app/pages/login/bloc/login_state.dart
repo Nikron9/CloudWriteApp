@@ -11,6 +11,12 @@ class LoginState extends Equatable {
     this.password = const Password.pure(),
   });
 
+  get isFormValid =>
+      !username.pure &&
+      username.error == null &&
+      !password.pure &&
+      password.error == null;
+
   final FormzStatus formState;
   final Username username;
   final Password password;

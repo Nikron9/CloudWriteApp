@@ -68,11 +68,11 @@ class NoteDetailsPage extends StatelessWidget {
         listener: (context, state) {
       if (state is NoteDetailsSubmitSuccess) {
         navigation.pop(context, state.newNote);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        Scaffold.of(context)..showSnackBar(SnackBar(
             backgroundColor: Colors.green.shade300,
             content: Text("Note created")));
       } else if (state is NoteDetailsSubmitFailure) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        Scaffold.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade300,
             content: Text(state.message)));
       }

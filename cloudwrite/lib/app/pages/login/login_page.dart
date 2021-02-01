@@ -18,6 +18,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePageContainer(
+        key: Key("login_screen_key"),
         child: BlocProvider(
             create: (context) {
               return LoginBloc();
@@ -64,7 +65,7 @@ class LoginPage extends StatelessWidget {
       }
       if (state is LoginFailure) {
         navigation.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        Scaffold.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.red.shade300,
             content: Text(state.message)));
       } else if (state.formState.isSubmissionSuccess) {
@@ -107,7 +108,7 @@ class LoginPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return TextField(
-          key: const Key('loginForm_usernameInput_textField'),
+          key: const Key('login_username_field_key'),
           onChanged: (username) =>
               context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           decoration: InputDecoration(
@@ -126,7 +127,7 @@ class LoginPage extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          key: const Key('loginForm_passwordInput_textField'),
+          key: const Key('login_password_field_key'),
           onChanged: (password) =>
               context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           obscureText: true,
@@ -145,9 +146,9 @@ class LoginPage extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return RaisedButton(
         color: Theme.of(context).primaryColor,
-        key: const Key('loginForm_continue_raisedButton'),
+        key: const Key('login_button_key'),
         child: Text(translate("common_login")),
-        onPressed: state.formState.isValidated
+        onPressed: state.isFormValid
             ? () {
                 context.read<LoginBloc>().add(const LoginSubmitted());
               }

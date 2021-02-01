@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
+            key: Key("home_screen_key"),
             body: Center(
                 child: Container(
                     width: context.screenWidth() * 0.9,
@@ -91,9 +92,8 @@ class HomePage extends StatelessWidget {
         child: Row(children: [
           Expanded(
               child: RaisedButton(
-                  onPressed: () => {
-                        navigation.navigateTo(context, "/login")
-                      },
+                  key: Key("home_login_button_key"),
+                  onPressed: () => {navigation.navigateTo(context, "/login")},
                   color: Theme.of(context).primaryColor,
                   child: Text(translate("common_login"))))
         ]));
@@ -103,9 +103,8 @@ class HomePage extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: MaterialButton(
-          onPressed: () => {
-                navigation.navigateTo(context, "/register")
-              },
+          key: Key("home_register_button_key"),
+          onPressed: () => {navigation.navigateTo(context, "/register")},
           child: Text(translate("common_registration"))),
     );
   }

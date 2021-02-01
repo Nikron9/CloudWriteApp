@@ -65,7 +65,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterChanged event,
     RegisterState state,
   ) async* {
-    if (state.formState.isValidated) {
+    if (state.isFormValid) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
         await Future.delayed(Duration(seconds: 2));

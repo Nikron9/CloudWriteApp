@@ -25,14 +25,24 @@ class NotesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        key: Key("notes_screen_key"),
         builder: (context, state) => BlocProvider(
             create: (context) => NotesBloc(NotesInit()),
             child: Builder(
                 builder: (context) => Scaffold(
+                      bottomNavigationBar: BottomNavigationBar(
+                        items: [
+                          BottomNavigationBarItem(
+                              icon: Icon(Icons.notes), label: "Notes"),
+                          BottomNavigationBarItem(
+                              icon: Icon(Icons.person), label: "Account")
+                        ],
+                      ),
                       appBar: AppBar(
                         title: Text(translate("CloudWrite")),
                         actions: [
                           IconButton(
+                              key: Key("notes_logout_button_key"),
                               icon: Icon(Icons.logout),
                               onPressed: () {
                                 context
@@ -44,6 +54,8 @@ class NotesPage extends StatelessWidget {
                         ],
                       ),
                       body: _notesMainContainer(context),
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.centerDocked,
                       floatingActionButton: FloatingActionButton(
                         child: Icon(Icons.add),
                         onPressed: () => navigateToNote(context),
@@ -57,7 +69,9 @@ class NotesPage extends StatelessWidget {
             RouteSettings(arguments: NoteEntity().copyWith(isArchived: false)));
 
     // context.read<NotesBloc>().state.notes.add(result);
-    context.read<NotesBloc>().add(AddNewNote(newNote: result));
+    if (result != null) {
+      context.read<NotesBloc>().add(AddNewNote(newNote: result));
+    }
   }
 
   Widget _notesMainContainer(BuildContext context) {
@@ -90,7 +104,7 @@ class NotesPage extends StatelessWidget {
   Widget _filters(NotesState state, BuildContext context) {
     return Padding(
         padding: EdgeInsets.all(10),
-        child: Row(children: [
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Tags(
               alignment: WrapAlignment.start,
               itemCount: 2,
@@ -136,9 +150,13 @@ class NotesPage extends StatelessWidget {
                       .firstWhere((element) => element is Fetch);
                 },
                 child: state.notes.isEmpty
-                    ? Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text("List is empty"))
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                            Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text("List is empty"))
+                          ])
                     : WaterfallFlow.builder(
                         primary: true,
                         shrinkWrap: true,

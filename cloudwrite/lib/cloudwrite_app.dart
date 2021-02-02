@@ -6,6 +6,7 @@ import 'package:cloudwrite/localization/localization_service.dart';
 import 'package:cloudwrite/routing.dart';
 import 'package:cloudwrite/service_resolver.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
@@ -16,6 +17,7 @@ class CloudWriteApp extends Application {
 
   @override
   Future onCreate() async {
+    await _initAppCenter();
     await _initStorage();
     await _initServiceLocator();
     await _initLocalization();
@@ -25,6 +27,18 @@ class CloudWriteApp extends Application {
 
   @override
   void onTerminate() {}
+
+  Future<void> _initAppCenter() async {
+    await AppCenter.startAsync(
+      appSecretAndroid: '19958592-af89-4b56-99ef-f6e9d5c27679',
+      appSecretIOS: '******',
+      enableAnalytics: true,
+      enableCrashes: true,
+      enableDistribute: true,
+      usePrivateDistributeTrack: false,
+      disableAutomaticCheckForUpdate: false,
+    );
+  }
 
   _initStorage() {
     GetIt.instance.registerSingleton(FlutterSecureStorage());

@@ -116,7 +116,10 @@ class HomePage extends StatelessWidget {
         FlatButton(
             onPressed: () => {_showSingleChoiceDialog(context)},
             child: Text(translate("change_language"),
-                style: TextStyle(fontSize: 10)))
+                style: TextStyle(fontSize: 10))),
+        FlatButton(
+            onPressed: () => {throw Exception("Test crash")},
+            child: Text("CRASH"))
       ],
     );
   }

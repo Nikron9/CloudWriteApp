@@ -3,6 +3,7 @@ import 'package:cloudwrite/localization/language_configuration.dart';
 import 'package:cloudwrite/service_resolver.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 class LanguageDialog extends StatefulWidget {
@@ -37,6 +38,10 @@ class _LanguageDialogState extends State<LanguageDialog> {
                               onChanged: (value) {
                                 ServiceResolver.get<FluroRouter>().pop(context);
                                 if (value.locale != snapshot.data.locale) {
+                                  AppCenter.trackEventAsync('User changed language', <String, String> {
+                                    'language': "${snapshot.data.locale}"
+                                  });
+
                                   _bloc.changeLanguage(context, value);
                                 }
                               },

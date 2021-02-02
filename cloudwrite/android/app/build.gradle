@@ -34,12 +34,12 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "pl.cloudwrite"
-        minSdkVersion 18
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode System.getenv('APPCENTER_BUILD_ID').toInteger()
         versionName flutterVersionName

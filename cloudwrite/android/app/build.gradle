@@ -6,7 +6,7 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
+def flutterRoot = localProperties.getProperty('flutter.sdk').replace("\\", "/")
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
@@ -48,16 +48,16 @@ android {
 
     flavorDimensions "flutter-flavours"
 
-    productFlavors{
-        development{
+    productFlavors {
+        development {
             dimension "flutter-flavours"
             applicationIdSuffix ".dev"
         }
-        staging{
+        staging {
             dimension "flutter-flavours"
             applicationIdSuffix ".stg"
         }
-        production{
+        production {
             dimension "flutter-flavours"
         }
     }

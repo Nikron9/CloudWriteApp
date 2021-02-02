@@ -10,7 +10,7 @@ cd ..
 # choose a different release channel if you want - https://github.com/flutter/flutter/wiki/Flutter-build-release-channels
 # stable - recommended for production
 
-git clone -b master https://github.com/Nikron9/CloudWriteApp.git
+git clone -b main https://github.com/Nikron9/CloudWriteApp.git
 export PATH=`pwd`/flutter/bin:$PATH
 
 flutter channel stable

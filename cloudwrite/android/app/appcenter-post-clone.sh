@@ -15,7 +15,7 @@ export PATH=`pwd`/flutter/bin:$PATH
 
 flutter channel stable
 flutter doctor
-flutter build apk --release -t lib/enviroments/production.dart
+flutter build apk --release --flavor production -t lib/enviroments/production.dart
 
 # copy the APK where AppCenter will find it
 mkdir -p android/app/build/outputs/apk/; mv build/app/outputs/apk/release/app-release.apk $_
